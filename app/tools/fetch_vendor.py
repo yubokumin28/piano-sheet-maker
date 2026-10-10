@@ -29,3 +29,10 @@ for name, url in LIBS.items():
 for n in NOTES:
     get(SAMPLE_BASE + n + ".mp3", os.path.join(WEB, "piano", n + ".mp3"))
 print("samples", len(os.listdir(os.path.join(WEB, "piano"))))
+
+# バンド音源用の GeneralUser GS(31MB)。配布 ZIP を軽くするため、無ければ配布元の写しから落とす
+SF2 = os.path.join(os.path.dirname(__file__), "..", "soundfont", "GeneralUser_GS.sf2")
+SF2_URL = "https://github.com/yubokumin28/piano-sheet-maker/releases/download/v1.0/GeneralUser_GS.sf2"
+os.makedirs(os.path.dirname(SF2), exist_ok=True)
+get(SF2_URL, SF2)
+print("soundfont", os.path.getsize(SF2))

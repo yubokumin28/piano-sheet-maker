@@ -73,12 +73,13 @@ code{background:#eef0f7;border-radius:5px;padding:1px 6px;font-size:14px}
 ├ <b>01_onegai_test.html</b>         <i>← 試してほしいことのお願い(チェック表つき)</i>
 ├ <b>setup.bat</b>                   <i>← 準備(最初の1回だけダブルクリック)</i>
 ├ <b>start_piano_sheet.bat</b>       <i>← 起動(毎回これをダブルクリック)</i>
+├ uninstall.bat               <i>← 消したい時だけ使う</i>
 ├ sample\                     <i>← お手本(曲と、そこから作った楽譜)</i>
 │  ├ sample_song.mp4          <i>   元の曲(自作曲なので自由に使えます)</i>
 │  ├ sample_score.pdf         <i>   できあがった楽譜(印刷用)</i>
 │  ├ sample_score.musicxml / sample_score.mid / sample_band.mp3
 └ app\                        <i>← アプリ本体(触らなくてOK)</i></div>
-<div class="tip">必要なもの: Windows 10 / 11 のパソコン、ネット接続(準備の時だけ)、空き容量 約3GB。<br>曲を楽譜にする作業は全部あなたのPCの中で行います。曲がどこかへ送られることはありません。</div>
+<div class="tip">必要なもの: Windows 10 / 11 のパソコン、ネット接続(準備の時だけ)、空き容量 約3GB(Cドライブ)。<br>曲を楽譜にする作業は全部あなたのPCの中で行います。曲がどこかへ送られることはありません。</div>
 </section>
 
 <section class="card" id="s2">
@@ -260,7 +261,11 @@ code{background:#eef0f7;border-radius:5px;padding:1px 6px;font-size:14px}
 <h3>終わり方</h3>
 <p>アプリの窓を閉じ、タスクバーの黒い窓「Piano Sheet server」も閉じます。</p>
 <h3>消し方(アンインストール)</h3>
-<p>piano-sheet-maker フォルダごと削除すれば消えます。作った楽譜もこのフォルダの中(data)にあるので一緒に消えます。準備で Python 3.11 を入れた場合は、「設定 → アプリ」から Python 3.11 を消せます(他で使っていなければ)。</p>
+<ol class="steps">
+<li><b>uninstall.bat</b> をダブルクリックし、<kbd>Y</kbd> を押す。<span class="res">準備で入れた AI の部品(約3GB・場所は ユーザー\AppData\Local\PianoSheet)が消えます</span></li>
+<li>piano-sheet-maker フォルダごと削除する。<span class="res">作った楽譜もこのフォルダの中(data)にあるので一緒に消えます。残したい楽譜は先に書き出してください</span></li>
+<li>準備で Python 3.11 を入れた場合は、「設定 → アプリ」から Python 3.11 を消せます(他で使っていなければ)。</li>
+</ol>
 <h3>困ったとき</h3>
 <table>
 <tr><th>こうなった</th><th>こうする</th></tr>

@@ -1,7 +1,7 @@
 @echo off
 rem Piano Sheet launcher: start the local server and open the app window.
 cd /d "%~dp0app"
-set "PY=%~dp0.venv\Scripts\python.exe"
+set "PY=%LOCALAPPDATA%\PianoSheet\venv\Scripts\python.exe"
 if not exist "%PY%" (
   echo Setup is not finished yet. Double-click setup.bat first.
   pause

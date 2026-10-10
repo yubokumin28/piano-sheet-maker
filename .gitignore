@@ -1,5 +1,6 @@
 .venv/
 data/
 app/web/vendor/
+app/soundfont/*.sf2
 __pycache__/
 *.pyc

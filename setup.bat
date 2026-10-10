@@ -26,11 +26,13 @@ if not defined PY (
 )
 
 echo.
-echo [2/5] Creating a private Python environment (.venv) ...
-if not exist ".venv\Scripts\python.exe" "%PY%" -m venv .venv
-set "VPY=%~dp0.venv\Scripts\python.exe"
+rem The environment lives in a short fixed place (long paths break pip, and OneDrive should not sync 3GB).
+set "VENV=%LOCALAPPDATA%\PianoSheet\venv"
+echo [2/5] Creating a private Python environment in %VENV% ...
+if not exist "%VENV%\Scripts\python.exe" "%PY%" -m venv "%VENV%"
+set "VPY=%VENV%\Scripts\python.exe"
 if not exist "%VPY%" (
-  echo ERROR: could not create .venv
+  echo ERROR: could not create the environment
   pause
   exit /b 1
 )
