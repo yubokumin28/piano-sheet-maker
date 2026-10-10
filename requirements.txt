@@ -1,0 +1,17 @@
+basic-pitch==0.4.0
+numpy==1.26.4
+librosa==0.11.0
+music21==10.5.0
+mutagen
+fastapi
+uvicorn
+python-multipart
+pretty_midi
+soundfile
+scipy
+onnxruntime
+tinysoundfont==0.3.7
+imageio-ffmpeg
+pyyaml
+tqdm
+cloudpickle

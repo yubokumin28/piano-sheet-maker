@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Piano Sheet</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232f3a8f'/%3E%3Cpath d='M12 22V9l11-2v13' stroke='white' stroke-width='2.4' fill='none'/%3E%3Ccircle cx='10' cy='22' r='3' fill='white'/%3E%3Ccircle cx='21' cy='20' r='3' fill='white'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!-- ============ ホーム(楽譜一覧) ============ -->
+<section id="home" class="screen active">
+  <header class="topbar">
+    <div class="brand"><span class="logo">&#9835;</span> Piano Sheet</div>
+    <div class="search"><input id="search" type="search" placeholder="曲名・アーティストで検索"></div>
+    <button id="btnNew" class="btn primary">＋ 新しい楽譜</button>
+  </header>
+  <main class="list-wrap">
+    <div id="emptyHint" class="empty hidden">
+      <div class="empty-icon">&#127929;</div>
+      <p>まだ楽譜がありません。</p>
+      <p class="sub">「＋ 新しい楽譜」から音源(mp3・wav・m4a など)を選ぶと、ピアノ譜を自動で作ります。</p>
+    </div>
+    <ul id="scoreList" class="score-list"></ul>
+  </main>
+</section>
+
+<!-- ============ 楽譜画面 ============ -->
+<section id="editor" class="screen">
+  <header class="topbar editor-bar">
+    <button id="btnHome" class="btn ghost" title="一覧へ戻る">&#8592; 一覧</button>
+    <div class="title-box">
+      <input id="edTitle" class="ed-title" spellcheck="false">
+      <div id="edSub" class="ed-sub"></div>
+    </div>
+    <div class="tabs">
+      <button class="tab active" data-tab="play">再生</button>
+      <button class="tab" data-tab="edit">編集</button>
+    </div>
+    <div class="bar-actions">
+      <button id="btnRecreate" class="btn ghost">作り直す</button>
+      <button id="btnExport" class="btn primary">書き出す</button>
+    </div>
+  </header>
+
+  <div id="playBar" class="subbar">
+    <button id="btnPlay" class="btn round" title="再生 / 一時停止 (スペース)">&#9654;</button>
+    <button id="btnStop" class="btn round light" title="最初へ">&#9632;</button>
+    <label class="ctl">速さ <input id="speed" type="range" min="40" max="150" value="100" step="5"> <span id="speedVal">100%</span></label>
+    <label class="ctl"><input id="muteR" type="checkbox" checked> 右手</label>
+    <label class="ctl"><input id="muteL" type="checkbox" checked> 左手</label>
+    <label class="ctl"><input id="metro" type="checkbox"> メトロノーム</label>
+    <label class="ctl"><input id="follow" type="checkbox" checked> 自動スクロール</label>
+    <span class="grow"></span>
+    <span class="hint">音符をクリックすると、そこから再生します</span>
+    <button id="zoomOut" class="btn light sm">－</button><span id="zoomVal" class="zoomval">100%</span><button id="zoomIn" class="btn light sm">＋</button>
+  </div>
+
+  <div id="editBar" class="subbar hidden">
+    <div class="sel-info" id="selInfo">音符をクリックして選んでください</div>
+    <div class="ctl-group">
+      <span class="lbl">高さ</span>
+      <button class="btn light sm" data-act="up" title="半音上げる (↑)">▲</button>
+      <button class="btn light sm" data-act="down" title="半音下げる (↓)">▼</button>
+    </div>
+    <div class="ctl-group">
+      <span class="lbl">オクターブ</span>
+      <button class="btn light sm" data-act="octUp">＋</button>
+      <button class="btn light sm" data-act="octDown">－</button>
+    </div>
+    <div class="ctl-group">
+      <span class="lbl">長さ</span>
+      <select id="durSel">
+        <option value="0.25">16分</option>
+        <option value="0.5">8分</option>
+        <option value="0.75">付点8分</option>
+        <option value="1">4分</option>
+        <option value="1.5">付点4分</option>
+        <option value="2">2分</option>
+        <option value="3">付点2分</option>
+        <option value="4">全音符</option>
+      </select>
+    </div>
+    <div class="ctl-group">
+      <button class="btn light sm" data-act="toggleRest" id="btnToggleRest">休符にする</button>
+      <button class="btn light sm" data-act="addTone" title="選んだ音の上に3度の音を重ねる">和音を足す</button>
+      <button class="btn light sm" data-act="hide" id="btnHide">非表示にする</button>
+      <button class="btn light sm danger" data-act="delete" title="この音を消す (Delete)">この音を消す</button>
+    </div>
+    <span class="grow"></span>
+    <button id="btnUndo" class="btn light sm" title="元に戻す (Ctrl+Z)">↶ 戻す</button>
+    <button id="btnEditCancel" class="btn ghost sm">取り消し</button>
+    <button id="btnEditSave" class="btn primary sm">保存</button>
+  </div>
+
+  <main id="sheetWrap" class="sheet-wrap">
+    <div id="sheet" class="sheet"></div>
+    <div id="sheetLoading" class="sheet-loading hidden">楽譜を描いています…</div>
+  </main>
+</section>
+
+<!-- ============ 新しい楽譜ダイアログ ============ -->
+<div id="dlgCreate" class="modal hidden">
+  <div class="modal-card">
+    <h2>新しい楽譜を作る</h2>
+    <div id="createForm">
+      <label id="drop" class="drop">
+        <input id="fileInput" type="file" accept="audio/*,video/*,.mp3,.wav,.m4a,.flac,.ogg,.aac,.wma">
+        <div class="drop-icon">&#127925;</div>
+        <div id="dropText">ここに音源をドロップ、またはクリックして選ぶ</div>
+        <div class="sub">mp3 / wav / m4a / flac / ogg / 動画(mp4)</div>
+      </label>
+      <div class="opt"><span class="opt-lbl">レベル</span>
+        <div class="seg" data-name="level">
+          <button data-v="1">入門</button><button data-v="2">初級</button><button data-v="3" class="on">中級</button><button data-v="4">上級</button>
+        </div></div>
+      <div class="opt"><span class="opt-lbl">調</span>
+        <div class="seg" data-name="key_mode">
+          <button data-v="auto" class="on">おまかせ</button><button data-v="easy">簡単キー</button><button data-v="original">原曲キー</button>
+        </div></div>
+      <div class="opt"><span class="opt-lbl">長さ</span>
+        <div class="seg" data-name="length">
+          <button data-v="full" class="on">フル</button><button data-v="short">1コーラス</button>
+        </div></div>
+      <div class="opt"><span class="opt-lbl">スタイル</span>
+        <div class="seg" data-name="style">
+          <button data-v="solo" class="on">ソロ譜</button><button data-v="accomp">伴奏譜</button>
+        </div></div>
+      <p class="opt-help" id="optHelp"></p>
+      <div class="modal-actions">
+        <button class="btn ghost" data-close>キャンセル</button>
+        <button id="btnStart" class="btn primary" disabled>楽譜を作る</button>
+      </div>
+    </div>
+    <div id="createProgress" class="hidden">
+      <div class="prog-title" id="progTitle"></div>
+      <div class="progress"><div id="progBar" class="progress-bar"></div></div>
+      <div class="prog-msg" id="progMsg">準備中</div>
+      <div class="modal-actions">
+        <button id="btnCancelConvert" class="btn ghost">変換をやめる</button>
+        <button id="btnBg" class="btn light">裏で続ける</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 作り直すダイアログ ============ -->
+<div id="dlgRecreate" class="modal hidden">
+  <div class="modal-card">
+    <h2>設定を変えて作り直す</h2>
+    <p class="sub">解析済みのデータから作り直すので、数秒で終わります。手で直した部分は消えます。</p>
+    <div class="opt"><span class="opt-lbl">レベル</span>
+      <div class="seg" data-name="level"><button data-v="1">入門</button><button data-v="2">初級</button><button data-v="3">中級</button><button data-v="4">上級</button></div></div>
+    <div class="opt"><span class="opt-lbl">調</span>
+      <div class="seg" data-name="key_mode"><button data-v="auto">おまかせ</button><button data-v="easy">簡単キー</button><button data-v="original">原曲キー</button></div></div>
+    <div class="opt"><span class="opt-lbl">長さ</span>
+      <div class="seg" data-name="length"><button data-v="full">フル</button><button data-v="short">1コーラス</button></div></div>
+    <div class="opt"><span class="opt-lbl">スタイル</span>
+      <div class="seg" data-name="style"><button data-v="solo">ソロ譜</button><button data-v="accomp">伴奏譜</button></div></div>
+    <div class="modal-actions">
+      <button class="btn ghost" data-close>キャンセル</button>
+      <button id="btnRecreateGo" class="btn primary">作り直す</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 書き出しダイアログ ============ -->
+<div id="dlgExport" class="modal hidden">
+  <div class="modal-card narrow">
+    <h2>書き出す</h2>
+    <button class="export-item" data-fmt="pdf"><b>PDF</b><span>印刷用の楽譜(A4)</span></button>
+    <button class="export-item" data-fmt="xml"><b>MusicXML</b><span>MuseScore・Finale などで開ける楽譜データ</span></button>
+    <button class="export-item" data-fmt="midi"><b>MIDI</b><span>DAW・電子ピアノで鳴らせる演奏データ</span></button>
+    <button class="export-item" data-fmt="band"><b>バンド音源(mp3)</b><span>楽譜どおりのピアノに、ベース・ストリングス・ドラムを自動で付けた音</span></button>
+    <div class="modal-actions"><button class="btn ghost" data-close>閉じる</button></div>
+  </div>
+</div>
+
+<!-- ============ 確認ダイアログ ============ -->
+<div id="dlgConfirm" class="modal hidden">
+  <div class="modal-card narrow">
+    <h2 id="cfTitle"></h2>
+    <p id="cfBody" class="sub"></p>
+    <div class="modal-actions">
+      <button class="btn ghost" id="cfNo">キャンセル</button>
+      <button class="btn primary" id="cfYes">OK</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast hidden"></div>
+<div id="pdfStage" class="pdf-stage"></div>
+
+<script src="vendor/opensheetmusicdisplay.min.js"></script>
+<script src="vendor/Tone.js"></script>
+<script src="vendor/jspdf.umd.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

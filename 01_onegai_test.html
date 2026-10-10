@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>試してほしいことのお願い</title>
+<style>
+:root{--ink:#1f2433;--sub:#5b6275;--line:#dfe3ee;--bg:#f6f7fb;--card:#fff;--brand:#2f3a8f;--brand2:#e8ebff;--accent:#e2574c;--ok:#1f9d6b;--warn:#fff6e0}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Yu Gothic UI","Hiragino Sans","Meiryo",sans-serif;line-height:1.8;font-size:16px}
+.wrap{max-width:980px;margin:0 auto;padding:24px 16px 80px}
+header.hero{background:var(--accent);color:#fff;border-radius:18px;padding:30px 28px;margin-bottom:24px}
+header.hero h1{margin:0 0 6px;font-size:28px}
+header.hero p{margin:0;opacity:.95}
+section.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px 26px;margin-bottom:22px}
+h2{margin:0 0 12px;font-size:21px}
+.pipe{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}
+.pipe div{background:var(--brand2);border-radius:12px;padding:14px;text-align:center;position:relative;font-size:15px}
+.pipe div b{display:block;font-size:26px;color:var(--brand)}
+.pipe div:not(:last-child)::after{content:"→";position:absolute;right:-12px;top:40%;color:var(--accent);font-weight:700}
+.q{display:flex;gap:12px;align-items:flex-start;margin:12px 0}
+.q .tag{flex:none;background:var(--brand);color:#fff;border-radius:8px;padding:2px 10px;font-weight:700}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th,td{border:1px solid var(--line);padding:7px 8px;text-align:left;vertical-align:top}
+th{background:var(--brand2);color:var(--brand)}
+input[type=text],textarea,select{width:100%;font:inherit;font-size:14px;border:1px solid #c9cedb;border-radius:6px;padding:5px 7px;background:#fff}
+textarea{min-height:52px;resize:vertical}
+.btn{display:inline-block;background:var(--accent);color:#fff;border:0;border-radius:10px;padding:10px 20px;font:inherit;font-weight:700;cursor:pointer}
+.btn.light{background:var(--brand2);color:var(--brand)}
+.note{background:var(--warn);border-left:4px solid #f0b429;border-radius:8px;padding:10px 14px;margin:12px 0;font-size:15px}
+.tip{background:#eaf7f1;border-left:4px solid var(--ok);border-radius:8px;padding:10px 14px;margin:12px 0;font-size:15px}
+pre{background:#1f2433;color:#e8ebff;border-radius:10px;padding:14px 16px;white-space:pre-wrap;font-size:14px}
+#copied{color:var(--ok);font-weight:700;margin-left:10px}
+.scale{font-size:13px;color:var(--sub)}
+@media (max-width:700px){.pipe{grid-template-columns:1fr 1fr}.pipe div:nth-child(2)::after{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+<h1>&#128588; 試してほしいことのお願い</h1>
+<p>このアプリで作った楽譜を AI に渡した時、AI が<b>本当にいい音楽を作ってくれるのか</b>を、あなたの耳で確かめてほしいです。</p>
+</header>
+
+<section class="card">
+<h2>なぜお願いするの?</h2>
+<p>このアプリは「好きな曲を楽譜にする」ところまではできます。次にやりたいのは、<b>その楽譜を AI に渡して、自分好みの新しい曲を作ってもらう</b>ことです。</p>
+<p>でも、楽譜が少しズレていたら、AI が作る曲もズレてしまいます。作った本人の耳だけでは気づけないので、<b>好きな曲をよく知っているあなたの耳</b>で確かめてほしいのです。</p>
+</section>
+
+<section class="card">
+<h2>やってほしいこと(1曲あたり15分ほど)</h2>
+<div class="pipe">
+<div><b>1</b>好きな曲を<br>2〜3曲選ぶ</div>
+<div><b>2</b>このアプリで<br>楽譜にする</div>
+<div><b>3</b>楽譜を<br>AIに渡す</div>
+<div><b>4</b>AIの曲を聞いて<br>点数をつける</div>
+</div>
+<h3>1. 好きな曲を2〜3曲選ぶ</h3>
+<p>何度も聞いていて、メロディを口ずさめる曲がおすすめです。<b>歌が入っている曲</b>だとアプリが得意です。手元の mp3 や mp4 を使ってください。</p>
+<h3>2. このアプリで楽譜にする</h3>
+<p>使い方ガイドの「4. 楽譜を作る」の通りに作り、<b>再生タブで原曲と聞き比べて</b>ください。ここで1回目の点数(楽譜の合い具合)をつけます。</p>
+<p>できたら「書き出す」から <b>MusicXML</b> と <b>MIDI</b> を書き出します(ダウンロードフォルダに入ります)。</p>
+<h3>3. 楽譜を AI に渡す</h3>
+<p>普段使っている AI(ChatGPT・Claude・Gemini・Suno など)に、書き出したファイルを添付して、例えばこう頼んでください。</p>
+<pre>添付したのは、私の好きな曲をピアノ譜にしたものです(MusicXML)。
+この曲のメロディ・コード進行・リズムの特徴を読み取って、
+同じ雰囲気の新しい曲を作ってください。
+できたら、どこをこの曲から受け継いだのかも教えてください。</pre>
+<div class="tip">ファイルを添付できない AI の時は、MusicXML をメモ帳で開いて中身を全部コピーし、貼り付けても大丈夫です。音を出せる AI(Suno など)なら、作ってもらった曲をそのまま聞いてください。楽譜や文字で返ってきた時は、このアプリや MuseScore で鳴らして聞いてください。</div>
+<h3>4. AI の曲を聞いて点数をつける</h3>
+<p>下のチェック表に記入して、最後のボタンで文章をコピーし、送り返してください。</p>
+</section>
+
+<section class="card">
+<h2>見てほしいポイント</h2>
+<div class="q"><span class="tag">A</span><div><b>楽譜は原曲に合っている?</b><br>アプリで再生した時、メロディが原曲だと分かるか。音がズレている所・抜けている所はどこか。</div></div>
+<div class="q"><span class="tag">B</span><div><b>AI の曲は「いい音楽」?</b><br>聞いていて気持ちいいか。変な音・ぶつかる和音・ガタガタのリズムが無いか。</div></div>
+<div class="q"><span class="tag">C</span><div><b>好きな曲の雰囲気が残っている?</b><br>「あの曲っぽい」と感じるか。どこが似ていて、どこが違うか。</div></div>
+<p class="scale">点数は 5=すごくいい / 4=いい / 3=ふつう / 2=いまいち / 1=だめ</p>
+</section>
+
+<section class="card">
+<h2>チェック表</h2>
+<p>このページの中で直接書き込めます(保存はされないので、書いたら最後にコピーしてください)。</p>
+<div style="overflow-x:auto">
+<table id="sheet">
+<tr><th style="width:18%">曲名 / アーティスト</th><th style="width:12%">使ったAI</th><th style="width:10%">A 楽譜の合い具合</th><th style="width:10%">B AIの曲の良さ</th><th style="width:10%">C 雰囲気の残り具合</th><th>気づいたこと(ズレていた所・よかった所)</th></tr>
+</table>
+</div>
+<p style="margin-top:10px"><button class="btn light" id="addRow" type="button">＋ 曲を1行足す</button></p>
+<h3>全体の感想</h3>
+<textarea id="overall" placeholder="使いやすかった所・分かりにくかった所・こんな機能がほしい など"></textarea>
+<p style="margin-top:16px"><button class="btn" id="copyBtn" type="button">記入した内容をコピーする</button><span id="copied"></span></p>
+<p class="scale">コピーした文章を、LINE やメールにそのまま貼り付けて送ってください。</p>
+</section>
+
+<section class="card">
+<h2>よくある質問</h2>
+<p><b>Q. 好きな曲を使っていいの?</b><br>A. 自分で持っている音源を、自分のPCの中で楽譜にして試すだけなら大丈夫です。できた楽譜やAIの曲を、ネットに公開したり売ったりはしないでください。</p>
+<p><b>Q. AI がうまく作ってくれない時は?</b><br>A. それも大事な結果です。「うまくいかなかった」と、AIの返事をそのまま教えてください。</p>
+<p><b>Q. どのくらいの曲数をやればいい?</b><br>A. 2〜3曲で十分です。1曲だけでもとても助かります。</p>
+</section>
+
+<p style="text-align:center"><a href="00_START_HERE_manual.html">← 使い方ガイドに戻る</a></p>
+</div>
+<script>
+const sheet = document.getElementById('sheet');
+const opts = '<option value="">-</option><option>5</option><option>4</option><option>3</option><option>2</option><option>1</option>';
+function addRow() {
+  const tr = document.createElement('tr');
+  tr.innerHTML = '<td><input type="text" placeholder="曲名 / 歌手"></td><td><input type="text" placeholder="例: ChatGPT"></td>' +
+    '<td><select>' + opts + '</select></td><td><select>' + opts + '</select></td><td><select>' + opts + '</select></td>' +
+    '<td><textarea placeholder="例: サビの高い音が1オクターブ低かった"></textarea></td>';
+  sheet.appendChild(tr);
+}
+for (let i = 0; i < 3; i++) addRow();
+document.getElementById('addRow').onclick = addRow;
+document.getElementById('copyBtn').onclick = async () => {
+  const lines = ['【Piano Sheet お試し結果】'];
+  [...sheet.querySelectorAll('tr')].slice(1).forEach((tr, i) => {
+    const v = [...tr.querySelectorAll('input,select,textarea')].map(e => e.value.trim());
+    if (!v.some(Boolean)) return;
+    lines.push(`■${i + 1}曲目: ${v[0] || '(曲名なし)'} / AI: ${v[1] || '-'}`);
+    lines.push(`  A 楽譜の合い具合: ${v[2] || '-'}  B AIの曲の良さ: ${v[3] || '-'}  C 雰囲気: ${v[4] || '-'}`);
+    if (v[5]) lines.push(`  気づいたこと: ${v[5]}`);
+  });
+  const ov = document.getElementById('overall').value.trim();
+  if (ov) lines.push('■全体の感想: ' + ov);
+  const text = lines.join('\n');
+  try { await navigator.clipboard.writeText(text); }
+  catch (e) { const t = document.createElement('textarea'); t.value = text; document.body.appendChild(t); t.select(); document.execCommand('copy'); t.remove(); }
+  document.getElementById('copied').textContent = 'コピーしました。LINEやメールに貼り付けてください';
+};
+</script>
+</body>
+</html>

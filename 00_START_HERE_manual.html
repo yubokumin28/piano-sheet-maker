@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Piano Sheet 使い方ガイド</title>
+<style>
+:root{--ink:#1f2433;--sub:#5b6275;--line:#dfe3ee;--bg:#f6f7fb;--card:#fff;--brand:#2f3a8f;--brand2:#e8ebff;--accent:#e2574c;--ok:#1f9d6b;--warn:#fff6e0}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Yu Gothic UI","Hiragino Sans","Meiryo",sans-serif;line-height:1.8;font-size:16px}
+.wrap{max-width:980px;margin:0 auto;padding:24px 16px 80px}
+header.hero{background:var(--brand);color:#fff;border-radius:18px;padding:32px 28px;margin-bottom:24px}
+header.hero h1{margin:0 0 6px;font-size:30px}
+header.hero p{margin:0;opacity:.9}
+.flow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:18px}
+.flow span{background:#fff2;border:1px solid #fff5;border-radius:999px;padding:4px 14px;font-size:14px}
+.flow b{opacity:.8}
+nav.toc{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 22px;margin-bottom:24px}
+nav.toc ol{margin:6px 0 0;padding-left:22px;columns:2;column-gap:32px}
+nav.toc a{color:var(--brand);text-decoration:none}
+section.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px 26px;margin-bottom:22px}
+h2{margin:0 0 12px;font-size:22px;display:flex;align-items:center;gap:10px}
+h2 .no{background:var(--brand);color:#fff;border-radius:50%;width:34px;height:34px;display:inline-flex;align-items:center;justify-content:center;font-size:17px;flex:none}
+h3{font-size:17px;margin:20px 0 6px;color:var(--brand)}
+.steps{counter-reset:s;list-style:none;padding:0;margin:10px 0}
+.steps li{counter-increment:s;position:relative;padding:8px 0 8px 46px;border-bottom:1px dashed var(--line)}
+.steps li:last-child{border-bottom:0}
+.steps li::before{content:counter(s);position:absolute;left:4px;top:8px;width:28px;height:28px;border-radius:8px;background:var(--brand2);color:var(--brand);font-weight:700;display:flex;align-items:center;justify-content:center}
+.res{display:block;color:var(--ok);font-size:14px}
+.res::before{content:"→ "}
+table{border-collapse:collapse;width:100%;margin:10px 0;font-size:15px}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:var(--brand2);color:var(--brand);white-space:nowrap}
+.note{background:var(--warn);border-left:4px solid #f0b429;border-radius:8px;padding:10px 14px;margin:12px 0;font-size:15px}
+.tip{background:#eaf7f1;border-left:4px solid var(--ok);border-radius:8px;padding:10px 14px;margin:12px 0;font-size:15px}
+.mock{margin:14px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fafbff}
+.mock svg{display:block;width:100%;height:auto}
+.cap{font-size:13px;color:var(--sub);padding:6px 12px;border-top:1px solid var(--line);background:#fff}
+kbd{background:#fff;border:1px solid #c9cedb;border-bottom-width:2px;border-radius:5px;padding:0 6px;font-size:13px;font-family:inherit}
+code{background:#eef0f7;border-radius:5px;padding:1px 6px;font-size:14px}
+.files{font-family:Consolas,monospace;font-size:14px;background:#1f2433;color:#e8ebff;border-radius:10px;padding:14px 18px;line-height:1.7;white-space:pre;overflow-x:auto}
+.files i{color:#9aa3c7;font-style:normal}
+.big-link{display:inline-block;background:var(--accent);color:#fff;text-decoration:none;border-radius:10px;padding:10px 18px;font-weight:700}
+@media (max-width:640px){nav.toc ol{columns:1}header.hero h1{font-size:24px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <h1>&#9835; Piano Sheet 使い方ガイド</h1>
+  <p>好きな曲の音源(mp3・mp4 など)を入れるだけで、AIがピアノ譜を自動で作るアプリです。Windows 専用・無料・ネットに曲は送りません(全部あなたのPCの中で動きます)。</p>
+  <div class="flow"><span>音源を入れる</span><b>→</b><span>AIが歌と伴奏を聞き分ける</span><b>→</b><span>ピアノ譜ができる</span><b>→</b><span>再生・修正・PDF</span></div>
+</header>
+
+<nav class="toc"><b>もくじ</b>
+<ol>
+<li><a href="#s1">入っているもの</a></li>
+<li><a href="#s2">準備する(最初の1回だけ)</a></li>
+<li><a href="#s3">アプリを起動する</a></li>
+<li><a href="#s4">楽譜を作る</a></li>
+<li><a href="#s5">聞く(再生タブ)</a></li>
+<li><a href="#s6">直す(編集タブ)</a></li>
+<li><a href="#s7">設定を変えて作り直す</a></li>
+<li><a href="#s8">書き出す(PDF など)</a></li>
+<li><a href="#s9">サンプルを見てみる</a></li>
+<li><a href="#s10">終わり方・消し方・困ったとき</a></li>
+</ol></nav>
+<section class="card" id="s1">
+<h2><span class="no">1</span>入っているもの</h2>
+<div class="files">piano-sheet-maker\
+├ <b>00_START_HERE_manual.html</b>   <i>← いま読んでいる説明書</i>
+├ <b>01_onegai_test.html</b>         <i>← 試してほしいことのお願い(チェック表つき)</i>
+├ <b>setup.bat</b>                   <i>← 準備(最初の1回だけダブルクリック)</i>
+├ <b>start_piano_sheet.bat</b>       <i>← 起動(毎回これをダブルクリック)</i>
+├ sample\                     <i>← お手本(曲と、そこから作った楽譜)</i>
+│  ├ sample_song.mp4          <i>   元の曲(自作曲なので自由に使えます)</i>
+│  ├ sample_score.pdf         <i>   できあがった楽譜(印刷用)</i>
+│  ├ sample_score.musicxml / sample_score.mid / sample_band.mp3
+└ app\                        <i>← アプリ本体(触らなくてOK)</i></div>
+<div class="tip">必要なもの: Windows 10 / 11 のパソコン、ネット接続(準備の時だけ)、空き容量 約3GB。<br>曲を楽譜にする作業は全部あなたのPCの中で行います。曲がどこかへ送られることはありません。</div>
+</section>
+
+<section class="card" id="s2">
+<h2><span class="no">2</span>準備する(最初の1回だけ・10〜20分)</h2>
+<ol class="steps">
+<li>受け取った ZIP ファイルを右クリック →「<b>すべて展開</b>」→「展開」。<span class="res">「piano-sheet-maker」フォルダができます。デスクトップやドキュメントなど、分かりやすい場所に置いてください</span></li>
+<li>フォルダの中の <b>setup.bat</b> をダブルクリック。</li>
+<li>青い画面「WindowsによってPCが保護されました」が出たら、<b>詳細情報</b> → <b>実行</b> を押す。<span class="res">自作アプリなので毎回この確認が出ます。危ないものではありません</span></li>
+<li>黒い画面に英語の文字が流れます。<b>閉じずに待つだけ</b>です。<span class="res">[1/5]〜[5/5] の順に進みます。[3/5] がいちばん長いです</span></li>
+<li>「<b>Setup finished.</b>」と出たら完了。何かキーを押すと閉じます。</li>
+</ol>
+<div class="mock"><svg viewBox="0 0 760 210" xmlns="http://www.w3.org/2000/svg" font-family="Consolas,monospace" font-size="14">
+<rect width="760" height="210" fill="#0c0c0c"/><rect width="760" height="28" fill="#2b2b2b"/>
+<text x="12" y="19" fill="#ddd" font-family="Yu Gothic UI,sans-serif" font-size="13">C:\Windows\system32\cmd.exe</text>
+<text x="16" y="56" fill="#ccc">[1/5] Python 3.11 found.</text>
+<text x="16" y="78" fill="#ccc">[2/5] Creating a private Python environment (.venv) ...</text>
+<text x="16" y="100" fill="#ccc">[3/5] Installing AI parts. This is the longest step ...</text>
+<text x="16" y="122" fill="#777">  Downloading ... (英語の文字がたくさん流れます)</text>
+<text x="16" y="144" fill="#ccc">[4/5] ...   [5/5] ...</text>
+<text x="16" y="174" fill="#7CFC9A">Setup finished.</text>
+<text x="16" y="196" fill="#7CFC9A">Double-click start_piano_sheet.bat to launch.</text>
+</svg><div class="cap">準備の画面。緑の「Setup finished.」が出たら成功です</div></div>
+<div class="note">パソコンに Python が入っていない場合は、[1/5] で自動的に入れます(数分)。途中で止まった時は、ネットがつながっているか確かめて、もう一度 setup.bat をダブルクリックしてください。終わった部分は飛ばすので2回目は早いです。</div>
+</section>
+
+<section class="card" id="s3">
+<h2><span class="no">3</span>アプリを起動する(毎回)</h2>
+<ol class="steps">
+<li><b>start_piano_sheet.bat</b> をダブルクリック。<span class="res">10〜30秒でアプリの窓が開きます</span></li>
+<li>同時に、タスクバーに黒い小さな窓「Piano Sheet server」が出ます。<b>これがアプリの本体なので、使っている間は閉じないでください。</b></li>
+</ol>
+<div class="mock"><svg viewBox="0 0 760 260" xmlns="http://www.w3.org/2000/svg" font-family="Yu Gothic UI,Meiryo,sans-serif">
+<rect width="760" height="260" fill="#f4f5fa"/>
+<rect width="760" height="56" fill="#2f3a8f"/>
+<text x="20" y="35" fill="#fff" font-size="19" font-weight="700">&#9835; Piano Sheet</text>
+<rect x="250" y="14" width="300" height="28" rx="14" fill="#fff" opacity=".95"/><text x="266" y="33" fill="#999" font-size="13">曲名・アーティストで検索</text>
+<rect x="590" y="12" width="150" height="32" rx="8" fill="#e2574c"/><text x="606" y="33" fill="#fff" font-size="14" font-weight="700">＋ 新しい楽譜</text>
+<rect x="30" y="80" width="700" height="62" rx="10" fill="#fff" stroke="#dfe3ee"/>
+<text x="52" y="106" font-size="15" font-weight="700" fill="#1f2433">sample_song</text>
+<text x="52" y="128" font-size="12" fill="#5b6275">中級 ・ G ・ フル ・ ソロ譜 ・ 106小節</text>
+<rect x="30" y="154" width="700" height="62" rx="10" fill="#fff" stroke="#dfe3ee"/>
+<text x="52" y="180" font-size="15" font-weight="700" fill="#1f2433">あなたの好きな曲</text>
+<rect x="52" y="192" width="300" height="8" rx="4" fill="#e8ebff"/><rect x="52" y="192" width="130" height="8" rx="4" fill="#2f3a8f"/>
+<text x="366" y="200" font-size="12" fill="#5b6275">歌と伴奏を分けています…</text>
+<circle cx="665" cy="28" r="22" fill="none" stroke="#ffd34d" stroke-width="3"/><text x="610" y="78" font-size="13" fill="#e2574c" font-weight="700">↑ ここから始める</text>
+</svg><div class="cap">ホーム画面(楽譜の一覧)。作った楽譜はここに並び、クリックすると開きます</div></div>
+</section>
+
+<section class="card" id="s4">
+<h2><span class="no">4</span>楽譜を作る</h2>
+<ol class="steps">
+<li>右上の <b>＋ 新しい楽譜</b> を押す。</li>
+<li>点線の枠に音源ファイルをドラッグして落とす(または枠をクリックして選ぶ)。<span class="res">mp3 / wav / m4a / flac / ogg / mp4(動画)に対応</span></li>
+<li>4つの設定を選ぶ(下の表)。迷ったら<b>そのまま</b>でOK。</li>
+<li><b>楽譜を作る</b> を押す。<span class="res">進み具合のバーが出ます。3分の曲で 1分半〜5分ほど(PCの性能で変わります)</span></li>
+<li>待っている間に別のことをしたい時は <b>裏で続ける</b>。一覧に戻り、できあがると開けるようになります。</li>
+</ol>
+<div class="mock"><svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" font-family="Yu Gothic UI,Meiryo,sans-serif" font-size="14">
+<rect width="760" height="360" fill="#00000055"/>
+<rect x="120" y="14" width="520" height="332" rx="14" fill="#fff"/>
+<text x="148" y="50" font-size="18" font-weight="700" fill="#1f2433">新しい楽譜を作る</text>
+<rect x="148" y="66" width="464" height="76" rx="10" fill="#f6f7fb" stroke="#9aa3c7" stroke-dasharray="6 5"/>
+<text x="232" y="102" fill="#2f3a8f">ここに音源をドロップ、またはクリックして選ぶ</text>
+<text x="262" y="126" fill="#5b6275" font-size="12">mp3 / wav / m4a / flac / ogg / 動画(mp4)</text>
+<g font-size="13"><text x="148" y="174" fill="#5b6275">レベル</text>
+<rect x="236" y="158" width="376" height="26" rx="6" fill="#eef0f7"/><rect x="424" y="158" width="94" height="26" rx="6" fill="#2f3a8f"/>
+<text x="265" y="176">入門</text><text x="358" y="176">初級</text><text x="452" y="176" fill="#fff">中級</text><text x="546" y="176">上級</text>
+<text x="148" y="212" fill="#5b6275">調</text>
+<rect x="236" y="196" width="376" height="26" rx="6" fill="#eef0f7"/><rect x="236" y="196" width="125" height="26" rx="6" fill="#2f3a8f"/>
+<text x="268" y="214" fill="#fff">おまかせ</text><text x="392" y="214">簡単キー</text><text x="516" y="214">原曲キー</text>
+<text x="148" y="250" fill="#5b6275">長さ</text>
+<rect x="236" y="234" width="376" height="26" rx="6" fill="#eef0f7"/><rect x="236" y="234" width="188" height="26" rx="6" fill="#2f3a8f"/>
+<text x="316" y="252" fill="#fff">フル</text><text x="488" y="252">1コーラス</text>
+<text x="148" y="288" fill="#5b6275">スタイル</text>
+<rect x="236" y="272" width="376" height="26" rx="6" fill="#eef0f7"/><rect x="236" y="272" width="188" height="26" rx="6" fill="#2f3a8f"/>
+<text x="306" y="290" fill="#fff">ソロ譜</text><text x="494" y="290">伴奏譜</text></g>
+<rect x="404" y="308" width="90" height="30" rx="8" fill="#fff" stroke="#c9cedb"/><text x="420" y="328">キャンセル</text>
+<rect x="502" y="308" width="110" height="30" rx="8" fill="#e2574c"/><text x="520" y="328" fill="#fff" font-weight="700">楽譜を作る</text>
+</svg><div class="cap">「＋ 新しい楽譜」を押した時の画面。濃い色が今選ばれている設定</div></div>
+<table>
+<tr><th>設定</th><th>選べるもの</th><th>どう変わるか</th></tr>
+<tr><td>レベル</td><td>入門 / 初級 / <b>中級</b> / 上級</td><td>入門: 右手はメロディだけ、左手は1小節に1音<br>初級: 右手は8分音符まで、左手はコードの根音<br>中級: 右手に和音を少し、左手は2音の和音<br>上級: 右手はメロディ+和音、左手は8分音符の分散和音</td></tr>
+<tr><td>調</td><td><b>おまかせ</b> / 簡単キー / 原曲キー</td><td>おまかせ: ♯♭が3つ以上の時だけ近い弾きやすい調へ<br>簡単キー: ♯♭なし(ハ長調/イ短調)に移す<br>原曲キー: 元の曲と同じ高さのまま</td></tr>
+<tr><td>長さ</td><td><b>フル</b> / 1コーラス</td><td>フル: 曲の最後まで / 1コーラス: 歌い出しから一回り分だけ</td></tr>
+<tr><td>スタイル</td><td><b>ソロ譜</b> / 伴奏譜</td><td>ソロ譜: 右手がメロディ、左手が伴奏<br>伴奏譜: メロディを入れず両手でコード(弾き語り用)</td></tr>
+</table>
+<div class="note">いちばん最初の1曲だけ、AIの準備で少し長くかかることがあります。歌が入っている曲がいちばん得意です。歌の無い曲(ピアノ曲・BGM)は、メロディの取り出しが苦手です。</div>
+</section>
+
+<section class="card" id="s5">
+<h2><span class="no">5</span>聞く(再生タブ)</h2>
+<p>一覧で曲名をクリックすると楽譜が開きます。上の帯のボタンで、楽譜をピアノの音で鳴らせます。</p>
+<div class="mock"><svg viewBox="0 0 760 210" xmlns="http://www.w3.org/2000/svg" font-family="Yu Gothic UI,Meiryo,sans-serif" font-size="13">
+<rect width="760" height="210" fill="#fff"/>
+<rect width="760" height="50" fill="#2f3a8f"/>
+<text x="14" y="31" fill="#fff">← 一覧</text><text x="90" y="25" fill="#fff" font-size="16" font-weight="700">sample_song</text><text x="90" y="42" fill="#c8cdf5" font-size="11">中級 ・ G ・ ♩=129</text>
+<rect x="330" y="12" width="56" height="26" rx="6" fill="#fff"/><text x="345" y="30" fill="#2f3a8f" font-weight="700">再生</text><text x="402" y="30" fill="#fff">編集</text>
+<text x="545" y="30" fill="#fff">作り直す</text><rect x="620" y="11" width="90" height="28" rx="7" fill="#e2574c"/><text x="638" y="30" fill="#fff" font-weight="700">書き出す</text>
+<rect y="50" width="760" height="46" fill="#f4f5fa"/>
+<circle cx="30" cy="73" r="15" fill="#2f3a8f"/><text x="25" y="78" fill="#fff">▶</text>
+<circle cx="66" cy="73" r="15" fill="#e8ebff"/><text x="60" y="78" fill="#2f3a8f">■</text>
+<text x="92" y="78">速さ</text><rect x="124" y="70" width="80" height="6" rx="3" fill="#c9cedb"/><circle cx="160" cy="73" r="7" fill="#2f3a8f"/><text x="210" y="78">100%</text>
+<text x="252" y="78">☑右手 ☑左手 ☐メトロノーム ☑自動スクロール</text>
+<text x="630" y="78">－ 100% ＋</text>
+<g stroke="#333" stroke-width="1"><line x1="20" y1="122" x2="740" y2="122"/><line x1="20" y1="130" x2="740" y2="130"/><line x1="20" y1="138" x2="740" y2="138"/><line x1="20" y1="146" x2="740" y2="146"/><line x1="20" y1="154" x2="740" y2="154"/>
+<line x1="20" y1="174" x2="740" y2="174"/><line x1="20" y1="182" x2="740" y2="182"/><line x1="20" y1="190" x2="740" y2="190"/><line x1="20" y1="198" x2="740" y2="198"/><line x1="20" y1="206" x2="740" y2="206"/></g>
+<g fill="#222"><ellipse cx="90" cy="142" rx="6" ry="4.5"/><ellipse cx="150" cy="138" rx="6" ry="4.5"/><ellipse cx="210" cy="134" rx="6" ry="4.5"/><ellipse cx="290" cy="142" rx="6" ry="4.5"/><ellipse cx="350" cy="146" rx="6" ry="4.5"/><ellipse cx="90" cy="194" rx="6" ry="4.5"/><ellipse cx="210" cy="190" rx="6" ry="4.5"/><ellipse cx="290" cy="194" rx="6" ry="4.5"/></g>
+<rect x="200" y="114" width="22" height="96" fill="#e2574c" opacity=".25"/>
+</svg><div class="cap">楽譜画面(再生タブ)。赤いすじが今鳴っている場所</div></div>
+<table>
+<tr><th>ボタン</th><th>押すとどうなるか</th></tr>
+<tr><td>▶(再生)</td><td>楽譜をピアノの音で鳴らす。もう一度押すと一時停止。<kbd>スペース</kbd>キーでも同じ</td></tr>
+<tr><td>■</td><td>最初に戻る</td></tr>
+<tr><td>速さ</td><td>40%〜150%。練習したい時はゆっくりに</td></tr>
+<tr><td>右手 / 左手</td><td>チェックを外すと、その手の音が鳴らなくなる(片手ずつ練習用)</td></tr>
+<tr><td>メトロノーム</td><td>カチカチと拍の音を足す</td></tr>
+<tr><td>自動スクロール</td><td>鳴っている場所に合わせて楽譜が自動で動く</td></tr>
+<tr><td>音符をクリック</td><td>その音符から再生が始まる</td></tr>
+<tr><td>－ / ＋</td><td>楽譜を小さく / 大きく表示</td></tr>
+</table>
+</section>
+
+<section class="card" id="s6">
+<h2><span class="no">6</span>直す(編集タブ)</h2>
+<p>AIの楽譜は完ぺきではありません。おかしな音は自分で直せます。</p>
+<ol class="steps">
+<li>上の <b>編集</b> を押す。</li>
+<li>直したい音符をクリック(選ぶと色が変わります)。</li>
+<li>下の表のボタンで直す。</li>
+<li>終わったら <b>保存</b>(<kbd>Ctrl</kbd>+<kbd>S</kbd>)。やめる時は <b>取り消し</b>。</li>
+</ol>
+<table>
+<tr><th>ボタン</th><th>押すとどうなるか</th><th>キー</th></tr>
+<tr><td>高さ ▲ / ▼</td><td>半音上げる / 下げる</td><td><kbd>↑</kbd> <kbd>↓</kbd></td></tr>
+<tr><td>オクターブ ＋ / －</td><td>1オクターブ上げる / 下げる</td><td><kbd>Shift</kbd>+<kbd>↑</kbd> / <kbd>↓</kbd></td></tr>
+<tr><td>長さ</td><td>16分〜全音符から選ぶ</td><td></td></tr>
+<tr><td>休符にする</td><td>音符を休符に(もう一度押すと音符に戻る)</td><td></td></tr>
+<tr><td>和音を足す</td><td>選んだ音の上に3度上の音を重ねる</td><td></td></tr>
+<tr><td>非表示にする</td><td>楽譜から見えなくする(消さずに隠す)</td><td></td></tr>
+<tr><td>この音を消す</td><td>音符を消す</td><td><kbd>Delete</kbd></td></tr>
+<tr><td>↶ 戻す</td><td>ひとつ前の状態に戻す</td><td><kbd>Ctrl</kbd>+<kbd>Z</kbd></td></tr>
+</table>
+</section>
+
+<section class="card" id="s7">
+<h2><span class="no">7</span>設定を変えて作り直す</h2>
+<p>上の <b>作り直す</b> を押すと、レベル・調・長さ・スタイルを選び直せます。曲の解析はもう済んでいるので<b>数秒</b>で終わります。</p>
+<div class="note">作り直すと、編集タブで手で直した部分は消えます。先に設定を決めてから直すのがおすすめです。</div>
+</section>
+
+<section class="card" id="s8">
+<h2><span class="no">8</span>書き出す(PDF など)</h2>
+<p>右上の <b>書き出す</b> を押して、形式を選びます。ファイルはパソコンの「<b>ダウンロード</b>」フォルダに入ります。</p>
+<table>
+<tr><th>形式</th><th>何に使う</th></tr>
+<tr><td><b>PDF</b></td><td>印刷して弾く・スマホやタブレットで見る</td></tr>
+<tr><td><b>MusicXML</b></td><td>楽譜ソフト(MuseScore など)で開いて本格的に直す。<b>AIに楽譜を渡す時もこれ</b></td></tr>
+<tr><td><b>MIDI</b></td><td>電子ピアノや作曲ソフトで鳴らす。AIに渡すこともできる</td></tr>
+<tr><td><b>バンド音源(mp3)</b></td><td>楽譜どおりのピアノに、ベース・ストリングス・ドラムを自動で付けた音。1分ほどかかります</td></tr>
+</table>
+</section>
+
+<section class="card" id="s9">
+<h2><span class="no">9</span>サンプルを見てみる</h2>
+<p><b>sample</b> フォルダに、お手本を1曲分入れてあります。元の曲は自作曲なので自由に使えます。</p>
+<table>
+<tr><th>ファイル</th><th>中身</th></tr>
+<tr><td>sample_song.mp4</td><td>元の曲(約3分)。これをアプリに入れて作ったのが下の4つ</td></tr>
+<tr><td>sample_score.pdf</td><td>できあがった楽譜(中級・おまかせ・フル・ソロ譜、A4で4ページ)。手直しはしていない、AIが作ったままの楽譜です</td></tr>
+<tr><td>sample_score.musicxml</td><td>同じ楽譜のデータ版</td></tr>
+<tr><td>sample_score.mid</td><td>同じ楽譜の演奏データ</td></tr>
+<tr><td>sample_band.mp3</td><td>楽譜をバンドで鳴らした音。元の曲と聞き比べてみてください</td></tr>
+</table>
+<div class="tip">練習におすすめ: sample_song.mp4 を「＋ 新しい楽譜」に入れて、自分の手で同じ楽譜を作ってみてください。PDF と同じものができれば、準備はばっちりです。</div>
+</section>
+
+<section class="card" id="s10">
+<h2><span class="no">10</span>終わり方・消し方・困ったとき</h2>
+<h3>終わり方</h3>
+<p>アプリの窓を閉じ、タスクバーの黒い窓「Piano Sheet server」も閉じます。</p>
+<h3>消し方(アンインストール)</h3>
+<p>piano-sheet-maker フォルダごと削除すれば消えます。作った楽譜もこのフォルダの中(data)にあるので一緒に消えます。準備で Python 3.11 を入れた場合は、「設定 → アプリ」から Python 3.11 を消せます(他で使っていなければ)。</p>
+<h3>困ったとき</h3>
+<table>
+<tr><th>こうなった</th><th>こうする</th></tr>
+<tr><td>start_piano_sheet.bat で「Setup is not finished yet」</td><td>先に setup.bat をダブルクリック(準備がまだ)</td></tr>
+<tr><td>アプリの窓が開かない</td><td>もう一度 start_piano_sheet.bat。それでもダメなら setup.bat をもう一度</td></tr>
+<tr><td>楽譜作りが「失敗しました」</td><td>別の形式(mp3 など)で試す。音源が壊れていないか確認</td></tr>
+<tr><td>再生しても音が鳴らない</td><td>パソコンの音量を確認。一度画面のどこかをクリックしてから ▶</td></tr>
+<tr><td>メロディが原曲と違う</td><td>AIの聞き取り違いです。編集タブで直すか、レベルを下げて作り直す</td></tr>
+</table>
+</section>
+
+<section class="card" style="text-align:center">
+<p style="margin:0 0 12px">使ってみたら、ぜひ感想を聞かせてください。</p>
+<a class="big-link" href="01_onegai_test.html">試してほしいことのお願いを読む →</a>
+</section>
+</div>
+</body>
+</html>
