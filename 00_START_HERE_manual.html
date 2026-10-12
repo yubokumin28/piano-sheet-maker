@@ -49,7 +49,7 @@ code{background:#eef0f7;border-radius:5px;padding:1px 6px;font-size:14px}
 
 <header class="hero">
   <h1>&#9835; Piano Sheet 使い方ガイド</h1>
-  <p>好きな曲の音源(mp3・mp4 など)を入れるだけで、AIがピアノ譜を自動で作るアプリです。Windows 専用・無料・ネットに曲は送りません(全部あなたのPCの中で動きます)。</p>
+  <p>好きな曲の音源(mp3・mp4 など)を入れるだけで、AIがピアノ譜を自動で作るアプリです。Windows / Mac 対応・無料・ネットに曲は送りません(全部あなたのPCの中で動きます)。</p>
   <div class="flow"><span>音源を入れる</span><b>→</b><span>AIが歌と伴奏を聞き分ける</span><b>→</b><span>ピアノ譜ができる</span><b>→</b><span>再生・修正・PDF</span></div>
 </header>
 
@@ -66,6 +66,22 @@ code{background:#eef0f7;border-radius:5px;padding:1px 6px;font-size:14px}
 <li><a href="#s9">サンプルを見てみる</a></li>
 <li><a href="#s10">終わり方・消し方・困ったとき</a></li>
 </ol></nav>
+<section class="card" id="v2">
+<h2><span class="no">★</span>バージョン2で変わったこと(2026-10-13)</h2>
+<p>「音は拾えていても、楽譜として弾けない」という感想をいただき、同じ曲を本家ヤマハ版と並べて測り直しました。音を聞き取る力はほぼ同じで、差は<b>楽譜への組み立て</b>にありました。そこを直しています。</p>
+<table>
+<tr><th>測ったもの(歌入り5曲の平均)</th><th>バージョン1</th><th>バージョン2</th></tr>
+<tr><td>右手が休符になっている長さ</td><td>32%</td><td>2%</td></tr>
+<tr><td>「音・短い休符・音」の細切れ(10秒あたり)</td><td>6.7回</td><td>1.0回</td></tr>
+<tr><td>調の外のコード(A調なのに Am など)</td><td>22%</td><td>10%</td></tr>
+</table>
+<ul>
+<li>歌の息つぎで休符にせず、前の音を伸ばしてつなぐ</li>
+<li>前奏・間奏など歌の無い所は、コードの分散和音で右手を埋める</li>
+<li>調に合わない聞き違いのコード・音を減らし、調号にある♯♭を音符ごとに書かない</li>
+<li><b>Mac でも使えるようになりました</b>(準備のしかたは 2 の下の「Mac の方へ」)</li>
+</ul>
+</section>
 <section class="card" id="s1">
 <h2><span class="no">1</span>入っているもの</h2>
 <div class="files">piano-sheet-maker\
@@ -74,6 +90,7 @@ code{background:#eef0f7;border-radius:5px;padding:1px 6px;font-size:14px}
 ├ <b>setup.bat</b>                   <i>← 準備(最初の1回だけダブルクリック)</i>
 ├ <b>start_piano_sheet.bat</b>       <i>← 起動(毎回これをダブルクリック)</i>
 ├ uninstall.bat               <i>← 消したい時だけ使う</i>
+├ setup_mac.command / start_mac.command / uninstall_mac.command  <i>← Mac 用(同じ役目)</i>
 ├ sample\                     <i>← お手本(曲と、そこから作った楽譜)</i>
 │  ├ sample_song.mp4          <i>   元の曲(自作曲なので自由に使えます)</i>
 │  ├ sample_score.pdf         <i>   できあがった楽譜(印刷用)</i>
@@ -103,6 +120,14 @@ code{background:#eef0f7;border-radius:5px;padding:1px 6px;font-size:14px}
 <text x="16" y="196" fill="#7CFC9A">Double-click start_piano_sheet.bat to launch.</text>
 </svg><div class="cap">準備の画面。緑の「Setup finished.」が出たら成功です</div></div>
 <div class="note">パソコンに Python が入っていない場合は、[1/5] で自動的に入れます(数分)。途中で止まった時は、ネットがつながっているか確かめて、もう一度 setup.bat をダブルクリックしてください。終わった部分は飛ばすので2回目は早いです。</div>
+<h3>Mac の方へ</h3>
+<ol class="steps">
+<li>ZIP をダブルクリックして展開し、「piano-sheet-maker」フォルダを分かりやすい場所に置く。</li>
+<li><b>setup_mac.command</b> を<b>右クリック →「開く」→「開く」</b>。<span class="res">ダブルクリックだと「開発元が未確認」で止まります。右クリックからなら開けます(最初の1回だけ)</span></li>
+<li>ターミナルの画面に文字が流れます。<b>閉じずに待つだけ</b>(10〜20分)。「準備ができました」と出たら完了。<span class="res">Python 3.11 が無い時は、ダウンロードページが開きます。「macOS 64-bit universal2 installer」を入れてから、もう一度 setup_mac.command を開いてください</span></li>
+<li>次からは <b>start_mac.command</b> を開くと、ブラウザに画面が出ます。<span class="res">ターミナルの画面を閉じると Piano Sheet も終わります</span></li>
+</ol>
+<div class="note">右クリックしても開けない時は、「アプリケーション → ユーティリティ → ターミナル」を開き、<code>bash </code>と打ってから setup_mac.command をターミナルへドラッグして Enter でも動きます。Mac 版は作者の手元で動作確認ができていません。動かなかったら、画面に出た文字を教えてください。</div>
 </section>
 
 <section class="card" id="s3">

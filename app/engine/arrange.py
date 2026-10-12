@@ -19,7 +19,12 @@ MAJOR_FIFTHS = {0: 0, 7: 1, 2: 2, 9: 3, 4: 4, 11: 5, 6: 6, 1: -5, 8: -4, 3: -3, 
 KS_MAJOR = np.array([6.35, 2.23, 3.48, 2.33, 4.38, 4.09, 2.52, 5.19, 2.39, 3.66, 2.29, 2.88])
 KS_MINOR = np.array([6.33, 2.68, 3.52, 5.38, 2.60, 3.53, 2.54, 4.75, 3.98, 2.69, 3.34, 3.17])
 
-GRID = {1: 1.0, 2: 0.5, 3: 0.5, 4: 0.25}
+GRID = {1: 1.0, 2: 0.5, 3: 0.5, 4: 0.5}
+# v2: 歌の採譜を「弾ける旋律」に整える目安(単位は拍)
+MIN_NOTE = {1: 0.5, 2: 0.4, 3: 0.3, 4: 0.2}   # これより短い音は、しゃくり・子音の拾い過ぎとみなして捨てる
+BRIDGE = {1: 2.0, 2: 1.5, 3: 1.0, 4: 1.0}     # これ以下の切れ目は、前の音を伸ばしてつなぐ(息つぎで休符にしない)
+DIATONIC_BONUS = 0.08                          # 調の中の和音を選びやすくする上乗せ
+SNAP_MAX = 0.5                             # 調の外の音で、これより短く前後が調の中なら、聞き違いとみなして近い調の音へ寄せる(拍)
 MEL_RANGE = {1: (60, 79), 2: (57, 84), 3: (55, 88), 4: (55, 88)}
 LEVEL_NAMES = {1: "入門", 2: "初級", 3: "中級", 4: "上級"}
 
@@ -88,7 +93,19 @@ def choose_transpose(tonic, mode, key_mode):
     return best
 
 
-def _chord_for(chroma, bass_pc, prev):
+SCALE = {"major": (0, 2, 4, 5, 7, 9, 11), "minor": (0, 2, 3, 5, 7, 8, 10, 11)}
+
+
+def scale_pcs(tonic, mode):
+    return {(tonic + i) % 12 for i in SCALE[mode]}
+
+
+def _diatonic(r, q, scale):
+    """その調の音だけでできた和音か。"""
+    return all(pc in scale for pc in chord_tones(r, q))
+
+
+def _chord_for(chroma, bass_pc, prev, scale=None):
     v = np.asarray(chroma, dtype=float)
     if v.sum() < 1e-6:
         return prev
@@ -105,6 +122,8 @@ def _chord_for(chroma, bass_pc, prev):
                 s += 0.12
             if prev is not None and prev == (r, q):
                 s += 0.04
+            if scale is not None and _diatonic(r, q, scale):
+                s += DIATONIC_BONUS  # v2: 調の外の和音(A調の Am など)は、はっきり聞こえる時だけ選ぶ
             if s > best_s:
                 best, best_s = (r, q), s
     return best
@@ -168,6 +187,55 @@ def _quantize_mono(notes, g):
     return [n for n in out if n["d"] > 0]
 
 
+def _bridge(notes, max_gap):
+    """短い切れ目は前の音を次の音の頭まで伸ばす。"""
+    for a, b in zip(notes, notes[1:]):
+        gap = b["o"] - (a["o"] + a["d"])
+        if 0 < gap <= max_gap + 1e-6:
+            a["d"] = b["o"] - a["o"]
+    return notes
+
+
+def _clean_melody(mel, level, scale=None):
+    """v2: 細切れの採譜を、休符の少ない1本の旋律にする。"""
+    notes = sorted((dict(n) for n in mel if n["d"] >= MIN_NOTE[level]), key=lambda n: n["o"])
+    # 調の外の短い音で、前後が調の中なら、半音隣の調の音へ寄せる(歌の音程の揺れの聞き違い)
+    if scale:
+        for i, n in enumerate(notes):
+            if n["p"] % 12 in scale or n["d"] > SNAP_MAX:
+                continue
+            nb = [notes[j]["p"] for j in (i - 1, i + 1) if 0 <= j < len(notes)]
+            if not all(p % 12 in scale for p in nb):
+                continue
+            ups, downs = n["p"] + 1, n["p"] - 1
+            ok = [p for p in (downs, ups) if p % 12 in scale]
+            if ok:
+                ref = sum(nb) / len(nb) if nb else n["p"]
+                n["p"] = min(ok, key=lambda p: abs(p - ref))
+    # 前後がなめらかなのに1音だけ大きく飛んだ所は、倍音の聞き違いとみなしてオクターブを戻す
+    for i in range(1, len(notes) - 1):
+        a, b, c = notes[i - 1]["p"], notes[i]["p"], notes[i + 1]["p"]
+        ref = (a + c) / 2
+        if abs(b - ref) >= 9 and abs(a - c) <= 5:
+            notes[i]["p"] = b + 12 * round((ref - b) / 12)
+    return _bridge(notes, BRIDGE[level])
+
+
+def _fill_pattern(tones, o, d, level):
+    """メロディの無い区間を、コードの音で埋める右手の型。"""
+    v = sorted(_place(pc, 60, 71) for pc in tones)
+    if level <= 2:
+        return [{"o": o, "d": d, "p": v}]
+    step = 0.5 if level == 4 else 1.0
+    seq = v + v[1:-1][::-1] if len(v) > 2 else v  # 上がって下がる分散和音
+    out, k, t = [], 0, o
+    while t < o + d - 1e-6:
+        out.append({"o": t, "d": min(step, o + d - t), "p": [seq[k % len(seq)]]})
+        k += 1
+        t += step
+    return out
+
+
 def arrange(raw, level=3, key_mode="auto", length="full", style="solo", title="", artist=""):
     level = int(level)
     tempo = float(raw.get("tempo") or 120)
@@ -227,6 +295,7 @@ def arrange(raw, level=3, key_mode="auto", length="full", style="solo", title=""
 
     # ---- 調と移調 ----
     tonic, mode = detect_key(beat_chroma, raw.get("melody", []))
+    scale = scale_pcs(tonic, mode)
     t = choose_transpose(tonic, mode, key_mode)
     new_tonic = (tonic + t) % 12
     fifths = key_fifths(new_tonic, mode)
@@ -248,7 +317,7 @@ def arrange(raw, level=3, key_mode="auto", length="full", style="solo", title=""
             if ov > 0:
                 bw[n["p"] % 12] = bw.get(n["p"] % 12, 0) + ov
         bass_pc = max(bw, key=bw.get) if bw else None
-        ch = _chord_for(vec, bass_pc, prev) or (0, "")
+        ch = _chord_for(vec, bass_pc, prev, scale) or (0, "")
         prev = ch
         root = (ch[0] + t) % 12
         tones = chord_tones(root, ch[1])
@@ -259,6 +328,7 @@ def arrange(raw, level=3, key_mode="auto", length="full", style="solo", title=""
 
     # ---- メロディ ----
     g = GRID[level]
+    mel = _clean_melody(mel, level, scale)
     for n in mel:
         n["p"] += t
     if mel:
@@ -267,7 +337,7 @@ def arrange(raw, level=3, key_mode="auto", length="full", style="solo", title=""
         lo, hi = MEL_RANGE[level]
         for n in mel:
             n["p"] = _fold(n["p"] + 12 * k, lo, hi)
-    mel_q = _quantize_mono(mel, g)
+    mel_q = _bridge(_quantize_mono(mel, g), BRIDGE[level])
 
     def chord_at(o):
         for c in chords:
@@ -341,26 +411,33 @@ def arrange(raw, level=3, key_mode="auto", length="full", style="solo", title=""
                         (_place(pc, n["p"] - 9, n["p"] - 3) for pc in c["tones"] if pc != n["p"] % 12),
                         reverse=True,
                     )
-                    below = [p for p in below if n["p"] - 9 <= p <= n["p"] - 3]
+                    below = [p for p in below if n["p"] - 9 <= p <= n["p"] - 3 and p >= 55]  # 右手の段から下へはみ出さない
                     take = 2 if (level == 4 and n["o"] in starts) else 1
                     ps = sorted(set(ps + below[:take]))
             rh.append({"o": n["o"], "d": n["d"], "p": ps})
-        if level == 4:
-            # メロディが休む2拍の区間はコードで埋める
-            for c in chords:
-                busy = any(n["o"] < c["o"] + c["d"] and n["o"] + n["d"] > c["o"] for n in mel_q)
-                if not busy:
-                    v = sorted(_place(pc, 60, 71) for pc in c["tones"])
-                    rh.append({"o": c["o"], "d": c["d"], "p": v})
+        # v2: メロディの無い所(前奏・間奏・1拍以上の休み)は、コードの音で右手を埋める
+        for c in chords:
+            a, b = c["o"], c["o"] + c["d"]
+            free, cur = [], a
+            for n in sorted((n for n in mel_q if n["o"] < b and n["o"] + n["d"] > a), key=lambda n: n["o"]):
+                if n["o"] > cur:
+                    free.append((cur, n["o"]))
+                cur = max(cur, n["o"] + n["d"])
+            if cur < b:
+                free.append((cur, b))
+            for s, e in free:
+                s = math.ceil(s / g - 1e-6) * g
+                if e - s >= 1.0 - 1e-6:
+                    rh.extend(_fill_pattern(c["tones"], s, e - s, level))
         rh.sort(key=lambda n: n["o"])
 
     chord_syms = []
     last = None
     for c in chords:
         name = chord_name(c["root"], c["q"], c["bass"], fifths)
-        if name != last:
+        if (c["root"], c["q"]) != last:  # v2: 低音だけの違い(G と G/D)では書き直さない
             chord_syms.append({"o": c["o"], "name": name})
-            last = name
+            last = (c["root"], c["q"])
 
     for arr in (rh, lh):
         for n in arr:

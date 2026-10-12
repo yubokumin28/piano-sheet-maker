@@ -76,6 +76,13 @@ def _build_part(notes, measures, fifths, is_right, chords, bpm, meta):
             p.insert(c["o"], cs)
     p.makeMeasures(inPlace=True)
     p.makeTies(inPlace=True)
+    # v2: 調号に入っている♯♭は音符ごとに書かない(臨時記号は調の外の音だけ。小節が変わったら付け直す)
+    ks = key.KeySignature(fifths)
+    for ms in p.getElementsByClass("Measure"):
+        try:
+            ms.makeAccidentals(useKeySignature=ks, cautionaryNotImmediateRepeat=False, inPlace=True)
+        except Exception:
+            pass
     try:
         p.makeBeams(inPlace=True)
     except Exception:
